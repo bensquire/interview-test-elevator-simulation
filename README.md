@@ -1,4 +1,4 @@
-# Interview Test - ELevator Simulation
+# Interview Test - Elevator Simulation
 
 ## Known limitations
 
