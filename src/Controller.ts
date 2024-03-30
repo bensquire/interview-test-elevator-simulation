@@ -4,12 +4,12 @@ import { Passenger } from './Passenger'
 import { MessageLogger } from './MessageLogger'
 
 export class Controller {
-	public logger: MessageLogger
-	public rawRequests: ElevatorRequests = []
-	public unprocessedRequests: ElevatorRequests = []
-	public elevators: Elevator[] = []
-	public passengers: Passenger[] = []
-	public timeInTenthsOfASecond: number = 0
+	private readonly elevators: Elevator[] = []
+	private readonly rawRequests: ElevatorRequests = []
+	private logger: MessageLogger
+	private unprocessedRequests: ElevatorRequests = []
+	private passengers: Passenger[] = []
+	private timeInTenthsOfASecond: number = 0
 
 	public constructor(elevators: Elevator[], rawRequests: ElevatorRequests, logger: MessageLogger) {
 		this.elevators = elevators
@@ -40,7 +40,7 @@ export class Controller {
 
 		while (isStillRunning) {
 			const foundEvents = this.findEventAtTime(this.timeInTenthsOfASecond, this.rawRequests)
-			this.unprocessedRequests = [...foundEvents, ...this.unprocessedRequests]
+			this.unprocessedRequests = [...foundEvents, ...this.unprocessedRequests].sort((a, b) => b[0] - a[0])
 
 			for (let i = this.unprocessedRequests.length - 1; i >= 0; i--) {
 				const request: ElevatorRequest = this.unprocessedRequests[i]
@@ -80,11 +80,6 @@ export class Controller {
 			isStillRunning = this.eventsToProcessOrPeopleOnElevator(this.rawRequests, this.elevators)
 			this.logger.setCurrentTimeInTenthOfASecond(this.timeInTenthsOfASecond)
 		}
-	}
-
-	private addLog = (message: string, prependTime = true): void => {
-		const messagePrefix = prependTime ? `Time ${(this.timeInTenthsOfASecond / 10).toFixed(1)} ` : ''
-		// this.log.push(`${messagePrefix}${message}`)
 	}
 
 	private findEventAtTime = (timeInTenthsOfASecond: number, events: ElevatorRequests): ElevatorRequests => {

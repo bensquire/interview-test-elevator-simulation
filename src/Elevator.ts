@@ -12,11 +12,11 @@ export enum ElevatorState {
 
 export class Elevator {
 	public id: number
-	public elevationInMetres: number
-	public floorHeightInMetres: number
-	public totalFloors: number
-	public destinationQueue: number[] = []
-	public holdTime: number = 0
+	private readonly floorHeightInMetres: number
+	private readonly totalFloors: number
+	private elevationInMetres: number
+	private destinationQueue: number[] = []
+	private holdTime: number = 0
 	private logger: MessageLogger
 	private state: ElevatorState = ElevatorState.Idle
 

@@ -1,10 +1,10 @@
 export class Passenger {
-	public originFloor: number = 0
-	public destinationFloor: number = 0
-	public timeRequested: number = 0
-	public timeEnteredElevator?: number = undefined
-	public timeExitedElevator?: number = undefined
+	public originFloor: number
+	public destinationFloor: number
 	public elevatorId: number
+	private readonly timeRequested: number
+	private timeEnteredElevator?: number = undefined
+	private timeExitedElevator?: number = undefined
 
 	constructor(timeRequested: number, originFloor: number, destinationFloor: number, elevatorId: number) {
 		this.timeRequested = timeRequested // In tenths of a second

@@ -11,8 +11,8 @@ describe('The controller', () => {
 
 		const controller = new Controller([elevator], requests, logger)
 		controller.execute()
-		expect(controller.passengers.length).toEqual(1)
-		const allJourneysCompleted = controller.passengers.every(passenger => passenger.hasCompletedJourney)
+		expect(controller['passengers'].length).toEqual(1)
+		const allJourneysCompleted = controller['passengers'].every(passenger => passenger.hasCompletedJourney)
 		expect(allJourneysCompleted).toBeTruthy()
 	})
 
@@ -23,8 +23,8 @@ describe('The controller', () => {
 
 		const controller = new Controller([elevator], requests, logger)
 		controller.execute()
-		expect(controller.passengers.length).toEqual(1)
-		const allJourneysCompleted = controller.passengers.every(passenger => passenger.hasCompletedJourney)
+		expect(controller['passengers'].length).toEqual(1)
+		const allJourneysCompleted = controller['passengers'].every(passenger => passenger.hasCompletedJourney)
 		expect(allJourneysCompleted).toBeTruthy()
 	})
 
@@ -38,8 +38,8 @@ describe('The controller', () => {
 
 		const controller = new Controller([elevator], requests, logger)
 		controller.execute()
-		expect(controller.passengers.length).toEqual(2)
-		const allJourneysCompleted = controller.passengers.every(passenger => passenger.hasCompletedJourney)
+		expect(controller['passengers'].length).toEqual(2)
+		const allJourneysCompleted = controller['passengers'].every(passenger => passenger.hasCompletedJourney)
 		expect(allJourneysCompleted).toBeTruthy()
 	})
 
@@ -54,8 +54,8 @@ describe('The controller', () => {
 
 		const controller = new Controller([elevator], requests, logger)
 		controller.execute()
-		expect(controller.passengers.length).toEqual(3)
-		const allJourneysCompleted = controller.passengers.every(passenger => passenger.hasCompletedJourney)
+		expect(controller['passengers'].length).toEqual(3)
+		const allJourneysCompleted = controller['passengers'].every(passenger => passenger.hasCompletedJourney)
 		expect(allJourneysCompleted).toBeTruthy()
 	})
 
@@ -70,8 +70,8 @@ describe('The controller', () => {
 
 		const controller = new Controller([elevator], requests, logger)
 		controller.execute()
-		expect(controller.passengers.length).toEqual(3)
-		const allJourneysCompleted = controller.passengers.every(passenger => passenger.hasCompletedJourney)
+		expect(controller['passengers'].length).toEqual(3)
+		const allJourneysCompleted = controller['passengers'].every(passenger => passenger.hasCompletedJourney)
 		expect(allJourneysCompleted).toBeTruthy()
 	})
 
@@ -85,8 +85,8 @@ describe('The controller', () => {
 
 		const controller = new Controller([elevator], requests, logger)
 		controller.execute()
-		expect(controller.passengers.length).toEqual(2)
-		const allJourneysCompleted = controller.passengers.every(passenger => passenger.hasCompletedJourney)
+		expect(controller['passengers'].length).toEqual(2)
+		const allJourneysCompleted = controller['passengers'].every(passenger => passenger.hasCompletedJourney)
 		expect(allJourneysCompleted).toBeTruthy()
 	})
 })

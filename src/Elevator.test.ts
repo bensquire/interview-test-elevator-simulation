@@ -17,7 +17,7 @@ describe('Elevator', () => {
 			elevator.tick()
 		}
 		expect(elevator.floor).toBe(10)
-		expect(elevator.holdTime).toBe(100)
+		expect(elevator['holdTime']).toBe(100)
 	})
 
 	test('knows if its between floors', () => {
@@ -110,7 +110,7 @@ describe('Elevator', () => {
 	test('can add a floor to the destination queue', () => {
 		const elevator = new Elevator(1, 0, 3, 10, logger)
 		elevator.addFloorToDestinationQueue(5)
-		expect(elevator.destinationQueue).toContain(5)
+		expect(elevator['destinationQueue']).toContain(5)
 	})
 
 	test('will throw error for invalid floors', () => {
@@ -149,7 +149,7 @@ describe('Elevator', () => {
 		elevator.tick()
 
 		expect(elevator.isAscending).toBeTruthy() // Check if the elevator has started ascending
-		expect(elevator.elevationInMetres).toBeGreaterThan(0)
+		expect(elevator['elevationInMetres']).toBeGreaterThan(0)
 	})
 
 	test('should handle door hold time at a destination floor', () => {
@@ -161,11 +161,11 @@ describe('Elevator', () => {
 		elevator.tick()
 		elevator.tick()
 		elevator.tick() // 3.0m?
-		expect(elevator.elevationInMetres).toEqual(3.0)
-		expect(elevator.holdTime).toEqual(100)
+		expect(elevator['elevationInMetres']).toEqual(3.0)
+		expect(elevator['holdTime']).toEqual(100)
 		elevator.tick()
-		expect(elevator.elevationInMetres).toEqual(3.0) // Elevator shouldn't have moved
-		expect(elevator.holdTime).toEqual(99) // holdTime is decrementing in 1/10 of a second
+		expect(elevator['elevationInMetres']).toEqual(3.0) // Elevator shouldn't have moved
+		expect(elevator['holdTime']).toEqual(99) // holdTime is decrementing in 1/10 of a second
 	})
 
 	// So if I got into an elevator on the ground (call it floor 0) and went to the top (floor 50) it would take 30 seconds to get to the top (=50 x 3/5)
