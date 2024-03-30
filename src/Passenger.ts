@@ -13,15 +13,15 @@ export class Passenger {
 		this.elevatorId = elevatorId
 	}
 
-	get hasEnteredElevator(): boolean {
+	public get hasEnteredElevator(): boolean {
 		return this.timeEnteredElevator !== undefined
 	}
 
-	get hasCompletedJourney(): boolean {
+	public get hasCompletedJourney(): boolean {
 		return this.timeExitedElevator !== undefined
 	}
 
-	get timeToCompletionInTenthSecond(): number {
+	public get timeToCompletionInTenthSecond(): number {
 		if (!this.timeExitedElevator) {
 			throw new Error('Passenger has not yet exited the elevator')
 		}
@@ -30,7 +30,7 @@ export class Passenger {
 	}
 
 	// Currently unused outside of tests
-	get timeSpentInElevatorInTenthSecond(): number {
+	public get timeSpentInElevatorInTenthSecond(): number {
 		if (!this.timeEnteredElevator) {
 			throw new Error('Passenger has not yet entered the elevator')
 		}
@@ -42,12 +42,12 @@ export class Passenger {
 		return this.timeExitedElevator - this.timeEnteredElevator
 	}
 
-	setTimeEnteredElevator = (timeEnteredElevator: number): this => {
+	public setTimeEnteredElevator = (timeEnteredElevator: number): this => {
 		this.timeEnteredElevator = timeEnteredElevator
 		return this
 	}
 
-	setTimeExitedElevator = (timeExitedElevator: number): this => {
+	public setTimeExitedElevator = (timeExitedElevator: number): this => {
 		this.timeExitedElevator = timeExitedElevator
 		return this
 	}

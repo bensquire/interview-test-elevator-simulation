@@ -17,24 +17,6 @@ export class Controller {
 		this.logger = logger
 	}
 
-	private get hasIncompleteRequests(): boolean {
-		return (
-			this.passengers.some(passenger => passenger.hasEnteredElevator && !passenger.hasCompletedJourney) ||
-			this.elevators.some(elevator => !elevator.isDestinationQueueEmpty) ||
-			this.unprocessedRequests.length > 0
-		)
-	}
-
-	private get totalForAllCompletedJourneysInSeconds(): number {
-		return (
-			this.passengers
-				.filter(passenger => passenger.hasCompletedJourney)
-				.reduce((totalTime, passenger) => {
-					return totalTime + passenger.timeToCompletionInTenthSecond
-				}, 0) / 10
-		)
-	}
-
 	public execute(): void {
 		let isStillRunning = true
 
@@ -45,14 +27,8 @@ export class Controller {
 			for (let i = this.unprocessedRequests.length - 1; i >= 0; i--) {
 				const request: ElevatorRequest = this.unprocessedRequests[i]
 
-				// Question: Do people getting on and off at the same floor, count as valid passengers
-				// if (event[1] === event[2]) {
-				// 	const sameFloorPassenger = new Passenger(event[0], event[1], event[2], this.elevators[0].id)
-				// 	sameFloorPassenger.setTimeEnteredElevator(this.timeInTenthsOfASecond)
-				// 	sameFloorPassenger.setTimeExitedElevator(this.timeInTenthsOfASecond)
-				// 	this.passengers.push(sameFloorPassenger)
-				// 	continue
-				// }
+				// Note: If people get on and off at same floor, we could deal with that here.
+
 				this.logger.passengerPressesButton(request[1], request[2])
 
 				const quickestElevator = this.findQuickestElevatorToGetPassengerToFloor(request)
@@ -69,17 +45,41 @@ export class Controller {
 
 			this.elevators.forEach(elevator => {
 				this.offLoadPassengers(elevator)
-				this.onboardPassengers(elevator) // Do before tick just in-case, someone presses at time 0
+				this.onboardPassengers(elevator) // Do before tick just in-case someone presses at time 0
 				elevator.tick()
-
-				// Time 4251.6 Elevator 1 arrived Floor 7. Waited 10 seconds. Moving to Floor 10.
-				// Time 4263.4 Elevator 1 arrived Floor 10. Waited ten seconds.
 			})
 
 			this.timeInTenthsOfASecond += 1 // 10th of 1 second
-			isStillRunning = this.eventsToProcessOrPeopleOnElevator(this.rawRequests, this.elevators)
+			isStillRunning = this.eventsToProcessOrPeopleOnElevator
 			this.logger.setCurrentTimeInTenthOfASecond(this.timeInTenthsOfASecond)
 		}
+	}
+
+	private get hasIncompleteRequests(): boolean {
+		return (
+			this.passengers.some(passenger => passenger.hasEnteredElevator && !passenger.hasCompletedJourney) ||
+			this.elevators.some(elevator => !elevator.isDestinationQueueEmpty) ||
+			this.unprocessedRequests.length > 0
+		)
+	}
+
+	private get hasEventsAfterCurrentTime(): boolean {
+		const lastEventIndex = this.rawRequests.length - 1
+		return this.rawRequests[lastEventIndex]?.[0] * 10 > this.timeInTenthsOfASecond
+	}
+
+	private get eventsToProcessOrPeopleOnElevator(): boolean {
+		return this.hasEventsAfterCurrentTime || this.hasIncompleteRequests
+	}
+
+	private get totalForAllCompletedJourneysInSeconds(): number {
+		return (
+			this.passengers
+				.filter(passenger => passenger.hasCompletedJourney)
+				.reduce((totalTime, passenger) => {
+					return totalTime + passenger.timeToCompletionInTenthSecond
+				}, 0) / 10
+		)
 	}
 
 	private findEventAtTime = (timeInTenthsOfASecond: number, events: ElevatorRequests): ElevatorRequests => {
@@ -88,15 +88,6 @@ export class Controller {
 				return event[0] * 10 === timeInTenthsOfASecond
 			}) || []
 		)
-	}
-
-	private hasEventsAfterCurrentTime = (timeInTenthsOfASecond: number, events: ElevatorRequests): boolean => {
-		const lastEventIndex = events.length - 1
-		return events[lastEventIndex]?.[0] * 10 > timeInTenthsOfASecond
-	}
-
-	private eventsToProcessOrPeopleOnElevator = (events: ElevatorRequests, elevators: Elevator[]): boolean => {
-		return this.hasEventsAfterCurrentTime(this.timeInTenthsOfASecond, events) || this.hasIncompleteRequests
 	}
 
 	private findQuickestElevatorToGetPassengerToFloor = (request: ElevatorRequest): Elevator | null => {

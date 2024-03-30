@@ -24,6 +24,7 @@ yarn test
 ## Assumptions
 
 - People get on and off of the elevator "instantly"
+- People getting on and off at same floor, currently still incur "time"
 
 ## Improvements
 
@@ -32,7 +33,6 @@ yarn test
   do, only then can go in another direction
 - Better logging (be useful to have debug messaging)
 - More thorough unit tests
-- Tighter object accessibility, for example controller is basically public
 - Better formatter, prettier feels a bit brutal currently
 - A build pipeline? Then don't need 'adjust-imports.mjs' hack
 - Some sort of Event system to better track what's happening
@@ -41,3 +41,4 @@ yarn test
 - Better handling of people getting on and off a same floor
 - Output messages are as spec (I believe), but could be dramatically improved
     - Logs are weird where passenger requests but unable to instantly action request as we delay until elevator is free
+- It would be nice to be able to swap out the algorthim which controls the elevator orders to test performance

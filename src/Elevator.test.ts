@@ -1,5 +1,4 @@
 import { Elevator } from './Elevator'
-import { Passenger } from './Passenger'
 import { MessageLogger } from './MessageLogger'
 
 describe('Elevator', () => {
