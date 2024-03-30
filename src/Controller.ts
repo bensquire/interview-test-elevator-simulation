@@ -1,6 +1,6 @@
 import { type ElevatorInterface } from './Elevator'
 import { type ElevatorRequest, type ElevatorRequests } from './requestEvents'
-import { Passenger } from './Passenger'
+import { type PassengerInterface, Passenger } from './Passenger'
 import { MessageLogger } from './MessageLogger'
 
 export class Controller {
@@ -8,7 +8,7 @@ export class Controller {
 	private readonly rawRequests: ElevatorRequests = []
 	private logger: MessageLogger
 	private unprocessedRequests: ElevatorRequests = []
-	private passengers: Passenger[] = []
+	private passengers: PassengerInterface[] = []
 	private timeInTenthsOfASecond: number = 0
 
 	public constructor(elevators: ElevatorInterface[], rawRequests: ElevatorRequests, logger: MessageLogger) {
@@ -116,8 +116,11 @@ export class Controller {
 		}
 
 		this.passengers
-			.filter(passenger => passenger.elevatorId === elevator.id && passenger.destinationFloor === elevator.floor && !passenger.hasCompletedJourney)
-			.forEach((passenger: Passenger) => {
+			.filter(
+				(passenger: PassengerInterface) =>
+					passenger.elevatorId === elevator.id && passenger.destinationFloor === elevator.floor && !passenger.hasCompletedJourney
+			)
+			.forEach((passenger: PassengerInterface) => {
 				// Note, doesn't take into account 10 secs, assumes person gets off of elevator instantly
 				passenger.setTimeExitedElevator(this.timeInTenthsOfASecond)
 				elevator.removeFloorFromDestinationQueue()
@@ -138,7 +141,7 @@ export class Controller {
 					!passenger.hasEnteredElevator &&
 					!passenger.hasCompletedJourney
 			)
-			.forEach((passenger: Passenger) => {
+			.forEach((passenger: PassengerInterface) => {
 				// Note, doesn't take into account 10 secs, assumes person gets onto elevator instantly
 				passenger.setTimeEnteredElevator(this.timeInTenthsOfASecond)
 			})

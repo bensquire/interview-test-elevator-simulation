@@ -1,4 +1,18 @@
-export class Passenger {
+export interface PassengerInterface {
+	originFloor: number
+	destinationFloor: number
+	elevatorId: number
+
+	readonly hasEnteredElevator: boolean
+	readonly hasCompletedJourney: boolean
+	readonly timeToCompletionInTenthSecond: number
+	readonly timeSpentInElevatorInTenthSecond: number
+
+	setTimeEnteredElevator(timeEnteredElevator: number): this
+	setTimeExitedElevator(timeExitedElevator: number): this
+}
+
+export class Passenger implements PassengerInterface {
 	public originFloor: number
 	public destinationFloor: number
 	public elevatorId: number
