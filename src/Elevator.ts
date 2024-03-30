@@ -10,7 +10,24 @@ export enum ElevatorState {
 	Idle = 'Idle'
 }
 
-export class Elevator {
+export interface ElevatorInterface {
+	readonly id: number
+	readonly floor: number
+	readonly isAtFloor: boolean
+	readonly isBetweenFloors: boolean
+	readonly isAtADestinationFloor: boolean
+	readonly isAscending: boolean
+	readonly isDescending: boolean
+	readonly isIdle: boolean
+	readonly isDestinationQueueEmpty: boolean
+
+	addFloorToDestinationQueue(floor: number): this
+	removeFloorFromDestinationQueue(): this
+	timeToFloorInTenthSecond(targetFloor: number): number
+	tick(): void
+}
+
+export class Elevator implements ElevatorInterface {
 	public id: number
 	private readonly floorHeightInMetres: number
 	private readonly totalFloors: number
@@ -151,6 +168,8 @@ export class Elevator {
 			return
 		}
 
+		this.state = this.destinationQueue[0] > this.floor ? ElevatorState.Up : ElevatorState.Down
+
 		if (this.isAscending && this.elevationInMetres < this.highestElevation) {
 			this.elevationInMetres += ELEVATOR_DISTANCE_PER_TENTH_SECOND
 		} else if (this.isDescending && this.elevationInMetres > 0) {
@@ -161,8 +180,6 @@ export class Elevator {
 			this.holdTime = ELEVATOR_HOLD_TIME_IN_TENTHS_SECOND
 			this.removeFloorFromDestinationQueue()
 		}
-
-		this.state = this.destinationQueue[0] > this.floor ? ElevatorState.Up : ElevatorState.Down
 	}
 
 	private isFloorInQueue = (floor: number): boolean => {

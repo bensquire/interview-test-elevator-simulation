@@ -1,17 +1,17 @@
-import { Elevator } from './Elevator'
+import { type ElevatorInterface } from './Elevator'
 import { type ElevatorRequest, type ElevatorRequests } from './requestEvents'
 import { Passenger } from './Passenger'
 import { MessageLogger } from './MessageLogger'
 
 export class Controller {
-	private readonly elevators: Elevator[] = []
+	private readonly elevators: ElevatorInterface[] = []
 	private readonly rawRequests: ElevatorRequests = []
 	private logger: MessageLogger
 	private unprocessedRequests: ElevatorRequests = []
 	private passengers: Passenger[] = []
 	private timeInTenthsOfASecond: number = 0
 
-	public constructor(elevators: Elevator[], rawRequests: ElevatorRequests, logger: MessageLogger) {
+	public constructor(elevators: ElevatorInterface[], rawRequests: ElevatorRequests, logger: MessageLogger) {
 		this.elevators = elevators
 		this.rawRequests = rawRequests
 		this.logger = logger
@@ -90,7 +90,7 @@ export class Controller {
 		)
 	}
 
-	private findQuickestElevatorToGetPassengerToFloor = (request: ElevatorRequest): Elevator | null => {
+	private findQuickestElevatorToGetPassengerToFloor = (request: ElevatorRequest): ElevatorInterface | null => {
 		const [_, startFloor, destinationFloor] = request
 		const isAscensionRequest = startFloor < destinationFloor
 
@@ -110,7 +110,7 @@ export class Controller {
 		return candidateElevators.length > 0 ? candidateElevators[0].elevator : null
 	}
 
-	private offLoadPassengers = (elevator: Elevator): void => {
+	private offLoadPassengers = (elevator: ElevatorInterface): void => {
 		if (!elevator.isAtFloor) {
 			return
 		}
@@ -125,7 +125,7 @@ export class Controller {
 			})
 	}
 
-	private onboardPassengers = (elevator: Elevator): void => {
+	private onboardPassengers = (elevator: ElevatorInterface): void => {
 		if (!elevator.isAtFloor) {
 			return
 		}
